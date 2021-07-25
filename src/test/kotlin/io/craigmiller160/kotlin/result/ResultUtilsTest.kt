@@ -69,60 +69,60 @@ class ResultUtilsTest {
     }
 
     @Test
-    fun `recoverAndFlatten with success result`() {
+    fun `flatRecover with success result`() {
         val result = runCatching { throw RuntimeException("Dying") }
-                .recoverAndFlatten { Result.success("Hello World") }
+                .flatRecover { Result.success("Hello World") }
                 .getOrThrow()
         assertEquals("Hello World", result)
     }
 
     @Test
-    fun `recoverAndFlatten with failed result`() {
+    fun `flatRecover with failed result`() {
         assertFailsWith<IOException> {
             runCatching { throw RuntimeException("Dying") }
-                    .recoverAndFlatten { Result.failure<Int>(IOException("IO Dying")) }
+                    .flatRecover { Result.failure<Int>(IOException("IO Dying")) }
                     .getOrThrow()
         }
     }
 
     @Test
-    fun `recoverAndFlatten where Result is already success`() {
+    fun `flatRecover where Result is already success`() {
         val result = Result.success("Success")
-                .recoverAndFlatten { Result.success("Hello World") }
+                .flatRecover { Result.success("Hello World") }
                 .getOrThrow()
         assertEquals("Success", result)
     }
 
     @Test
-    fun `recoverCatchingAndFlatten with success result`() {
+    fun `flatRecoverCatching with success result`() {
         val result = runCatching { throw RuntimeException("Dying") }
-                .recoverCatchingAndFlatten { Result.success("Hello World") }
+                .flatRecoverCatching { Result.success("Hello World") }
                 .getOrThrow()
         assertEquals("Hello World", result)
     }
 
     @Test
-    fun `recoverCatchingAndFlatten with failed result`() {
+    fun `flatRecoverCatching with failed result`() {
         assertFailsWith<IOException> {
             runCatching { throw RuntimeException("Dying") }
-                    .recoverCatchingAndFlatten { Result.failure<Int>(IOException("IO Dying")) }
+                    .flatRecoverCatching { Result.failure<Int>(IOException("IO Dying")) }
                     .getOrThrow()
         }
     }
 
     @Test
-    fun `recoverCatchingAndFlatten that catches exception`() {
+    fun `flatRecoverCatching that catches exception`() {
         assertFailsWith<IOException> {
             runCatching { throw RuntimeException("Dying") }
-                    .recoverCatchingAndFlatten { throw IOException("IO Dying") }
+                    .flatRecoverCatching { throw IOException("IO Dying") }
                     .getOrThrow()
         }
     }
 
     @Test
-    fun `recoverCatchingAndFlatten where Result is already success`() {
+    fun `flatRecoverCatching where Result is already success`() {
         val result = Result.success("Success")
-                .recoverCatchingAndFlatten { Result.success("Hello World") }
+                .flatRecoverCatching { Result.success("Hello World") }
                 .getOrThrow()
         assertEquals("Success", result)
     }
