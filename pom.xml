@@ -8,6 +8,19 @@
     <artifactId>kotlin-result-extension</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Releases</name>
+            <url>https://craigmiller160.ddns.net:30003/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Snapshot</name>
+            <url>https://craigmiller160.ddns.net:30003/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <kotlin.version>1.5.21</kotlin.version>
         <junit.version>5.7.2</junit.version>
