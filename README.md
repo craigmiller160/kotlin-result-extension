@@ -38,10 +38,22 @@ val result = runCatching {
 ```
 ### flatRecover
 
-Similar to the existing `recover` function, only it expects a `Result` to be returned from the transformation. Like the others, it will unwrap the `Result` to propagate it.
+Similar to the existing `recover` function, only it expects a `Result` to be returned from the transformation. Like the others, it will unwrap the `Result` to propagate it. Useful for recovering with operations that return a result.
 
 ```
-
+val result = runCatching { throw RuntimeException("Dying") }
+    .flatRecover { Result.success("Hello World") }
+    .getOrThrow()
+// "result" is "Hello World"
 ```
 
 ### recoverCatchingAndFlatten
+
+Same as `flatRecover`, but it can handle exceptions being thrown within the function body.
+
+```
+val result = runCatching { throw RuntimeException("Dying") }
+    .flatRecoverCatching { Result.success("Hello World") }
+    .getOrThrow()
+// "result" is "Hello World"
+```
