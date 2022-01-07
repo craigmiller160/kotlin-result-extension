@@ -5,7 +5,7 @@ more robust, functional-style error handling. The main focus is on chaining `Res
 together and handling more complex and nested structures.
 
 These extensions unleash all the "monadic power" of `kotlin.Result`, making it a
-real [Monad](https://en.wikipedia.org/wiki/Monad_(functional_programming).
+real [Monad](https://en.wikipedia.org/wiki/Monad_(functional_programming)).
 
 ## New Functions
 
