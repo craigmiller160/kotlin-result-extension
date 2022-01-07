@@ -7,15 +7,36 @@ together and handling more complex and nested structures.
 These extensions unleash all the "monadic power" of `kotlin.Result`, making it a
 real [Monad](https://en.wikipedia.org/wiki/Monad_(functional_programming)).
 
-## New Functions
+## Usage
+
+1. Add it in your root `build.gradle` at the end of repositories:
+
+```groovy
+allprojects {
+    repositories {
+        // ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+2. Add the dependency
+
+```groovy
+dependencies {
+    implementation("com.github.siboxd:kotlin-result-extension:${latestVersion}")
+}
+```
+
+## Functionalities
 
 ### Overview
 
-- `flatMap`
-- `flatMapCatching`
-- `flatRecover`
-- `flatReceoverCatching`
-- `flatten`
+- [`flatMap`](#flatMap)
+- [`flatMapCatching`](#flatMapCatching)
+- [`flatRecover`](#flatRecover)
+- [`flatReceoverCatching`](#flatReceoverCatching)
+- [`flatten`](#flatten)
 
 #### `flatMap`
 
