@@ -15,6 +15,31 @@ class ResultUtilsTest {
     private val myOtherFailureResult = Result.failure<String>(MyTestException("Second"))
 
     @Test
+    fun flattenAnOuterSuccessfulResultWithAnInnerSuccessfulResult() {
+        val actualResult = Result.success(mySuccessResult)
+            .flatten()
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun flattenAnOuterSuccessfulResultWithAndInnerFailureResult() {
+        val actualResult = Result.success(myFailureResult)
+            .flatten()
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun flattenThreeLevelsOfResults() {
+        val actualResult = Result.success(Result.success(mySuccessResult))
+            .flatten()
+            .flatten()
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
     fun flatMapSuccessfulResultIntoSuccessfulResult() {
         val actualResult = mySuccessResult
             .flatMap { myOtherSuccessResult }
@@ -56,6 +81,56 @@ class ResultUtilsTest {
     fun flatMapFailureResultIntoThrowingException() {
         val actualResult = myFailureResult
             .flatMap<String, String> { throw MyTestException("RuntimeException") }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingSuccessfulResultIntoSuccessfulResult() {
+        val actualResult = mySuccessResult
+            .flatMapCatching { myOtherSuccessResult }
+
+        assertEquals(myOtherSuccessResult, actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingSuccessfulResultIntoFailureResult() {
+        val actualResult = mySuccessResult
+            .flatMapCatching { myFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingSuccessfulResultIntoThrowingException() {
+        val testException = MyTestException("RuntimeException")
+
+        val actualResult = mySuccessResult
+            .flatMapCatching<String, String> { throw testException }
+
+        assertEquals(Result.failure<String>(testException), actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingFailureResultIntoSuccessResult() {
+        val actualResult = myFailureResult
+            .flatMapCatching { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingFailureResultIntoFailureResult() {
+        val actualResult = myFailureResult
+            .flatMapCatching { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun flatMapCatchingFailureResultIntoThrowingException() {
+        val actualResult = myFailureResult
+            .flatMapCatching<String, String> { throw MyTestException("RuntimeException") }
 
         assertEquals(myFailureResult, actualResult)
     }
@@ -154,30 +229,5 @@ class ResultUtilsTest {
             .flatRecoverCatching { throw testException }
 
         assertEquals(Result.failure<String>(testException), actualResult)
-    }
-
-    @Test
-    fun flattenAnOuterSuccessfulResultWithAnInnerSuccessfulResult() {
-        val actualResult = Result.success(mySuccessResult)
-            .flatten()
-
-        assertEquals(mySuccessResult, actualResult)
-    }
-
-    @Test
-    fun flattenAnOuterSuccessfulResultWithAndInnerFailureResult() {
-        val actualResult = Result.success(myFailureResult)
-            .flatten()
-
-        assertEquals(myFailureResult, actualResult)
-    }
-
-    @Test
-    fun flattenThreeLevelsOfResults() {
-        val actualResult = Result.success(Result.success(mySuccessResult))
-            .flatten()
-            .flatten()
-
-        assertEquals(mySuccessResult, actualResult)
     }
 }
