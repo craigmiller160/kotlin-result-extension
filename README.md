@@ -1,4 +1,4 @@
-# Kotlin Result Extension
+# Kotlin Result Extension ![](https://jitpack.io/v/siboxd/kotlin-result-extension.svg)](https://jitpack.io/#siboxd/kotlin-result-extension)
 
 This project adds several new methods to the Kotlin `Result` (`kotlin.Result<T>`) type to facilitate
 more robust, functional-style error handling. The main focus is on chaining `Result` operations
