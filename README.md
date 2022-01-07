@@ -1,59 +1,95 @@
 # Kotlin Result Extension
 
-This project adds several new methods to the Kotlin `Result` type to facilitate more robust, functional-style error handling. The main focus is on chaining `Result` operations together and handling more complex and nested structures.
+This project adds several new methods to the Kotlin `Result` (`kotlin.Result<T>`) type to facilitate
+more robust, functional-style error handling. The main focus is on chaining `Result` operations
+together and handling more complex and nested structures.
+
+These extensions unleash all the "monadic power" of `kotlin.Result`, making it a
+real [Monad](https://en.wikipedia.org/wiki/Monad_(functional_programming).
 
 ## New Functions
 
-### flatMap
+### Overview
 
-Transforms the value of a successful `Result` and expects the result of the transformation to return a `Result`. Using just `map`, this leads to `Result<Result<T>>`, but `flatMap` will unwrap the outer `Result` so only the inner one is returned.
+- `flatMap`
+- `flatMapCatching`
+- `flatRecover`
+- `flatReceoverCatching`
+- `flatten`
 
-```
+#### `flatMap`
+
+Transforms the value of a successful `Result` and expects the result of the transformation to return
+a `Result`. Using just `map`, this leads to `Result<Result<T>>`, but `flatMap` will unwrap the
+outer `Result` so only the inner one is returned.
+
+```kotlin
 val doMoreReturnResult = { value -> "More: $value" }
 
-val result = runCatching {
-	"Start Value"
-}
-	.flatMap { startValue -> doMoreReturnResult(startValue) }
-	.getOrThrow()
+val result = runCatching { "Start Value" }
+    .flatMap { startValue -> doMoreReturnResult(startValue) }
+    .getOrThrow()
 
-// "result" is "More: Start Value"
+// `result` is `"More: Start Value"`
 ```
 
-### flatten
+#### `flatMapCatching`
 
-A simple way to unwrap nested Results from chained operations.
+Same as `flatMap` but catches exceptions that could be thrown by the transforming function.
 
+```kotlin
+val result = runCatching { "Start Value" }
+    .flatMap { startValue -> throw RuntimeException("MyException") }
+    .getOrThrow()
+
+// `result` is `Result.failure(RuntimeException("MyException"))`
 ```
-val doMoreReturnResult = { value -> "More: $value" }
 
-val result = runCatching {
-	"Start Value"
-}
-	.map { startValue -> doMoreReturnResult(startValue) }
-	.flatten()
-	.getOrThrow()
+#### `flatRecover`
 
-// "result" is "More: Start Value"
-```
-### flatRecover
+Similar to the existing `recover` function, only it expects a `Result` to be returned from the
+transformation. Like the others, it will unwrap the `Result` to propagate it. Useful for recovering
+with operations that return a result.
 
-Similar to the existing `recover` function, only it expects a `Result` to be returned from the transformation. Like the others, it will unwrap the `Result` to propagate it. Useful for recovering with operations that return a result.
-
-```
+```kotlin
 val result = runCatching { throw RuntimeException("Dying") }
     .flatRecover { Result.success("Hello World") }
     .getOrThrow()
-// "result" is "Hello World"
+// `result` is `Hello World`
 ```
 
-### recoverCatchingAndFlatten
+#### `flatRecoverCatching`
 
 Same as `flatRecover`, but it can handle exceptions being thrown within the function body.
 
-```
+```kotlin
 val result = runCatching { throw RuntimeException("Dying") }
-    .flatRecoverCatching { Result.success("Hello World") }
+    .flatRecoverCatching { throw RuntimeException("MyException") }
     .getOrThrow()
-// "result" is "Hello World"
+// `result` is `Result.failure(RuntimeException("MyException"))`
 ```
+
+#### `flatten`
+
+A simple way to unwrap nested Results from chained operations.
+
+```kotlin
+val doMoreReturnResult = { value -> "More: $value" }
+
+val result = runCatching { "Start Value" }
+    .map { startValue -> doMoreReturnResult(startValue) }
+    .flatten()
+    .getOrThrow()
+
+// "result" is "More: Start Value"
+```
+
+# Authors
+
+### Creator
+
+[Craig Millers](https://github.com/craigmiller160)
+
+### Contributors
+
+[Enrico Siboni](https://github.com/siboxd/)
