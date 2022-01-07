@@ -1,0 +1,60 @@
+apply plugin: 'maven-publish'
+
+task androidSourcesJar(type: Jar) {
+    archiveBaseName.set(repositoryProjectName)
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // Set sources artifact to be published with library
+                artifact androidSourcesJar
+
+                Objects.requireNonNull(mavenGroupId, "Maven base path must not be null")
+                Objects.requireNonNull(artifactVersion, "Artifact version must not be null")
+                if (mavenGroupId.isEmpty() || artifactVersion.isEmpty()) {
+                    throw new IllegalStateException("mavenGroupId ($mavenGroupId) and artifactVersion ($artifactVersion) should not be empty")
+                }
+
+                // You can then customize attributes of the publication here.
+                groupId = mavenGroupId
+                artifactId = repositoryProjectName
+                version = artifactVersion
+            }
+        }
+
+        repositories {
+            // Declare repository where to publish (same syntax as when declaring for consuming dependencies)
+            maven {
+                def repoUrlVarName = "MAVEN_REPO_URL"
+                def repoUsernameVarName = "MAVEN_REPO_USERNAME"
+                def repoPasswordVarName = "MAVEN_REPO_PASSWORD"
+
+                def repoUrl = System.getenv(repoUrlVarName)
+                def repoUsername = System.getenv(repoUsernameVarName)
+                def repoPassword = System.getenv(repoPasswordVarName)
+
+                if (repoUrl == null) {
+                    repoUrl = getProperty(repoUrlVarName)
+                    repoUsername = getProperty(repoUsernameVarName)
+                    repoPassword = getProperty(repoPasswordVarName)
+                }
+
+                url repoUrl
+                credentials {
+                    username repoUsername
+                    password repoPassword
+                }
+            }
+        }
+    }
+}
