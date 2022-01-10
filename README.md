@@ -62,7 +62,7 @@ Same as `flatMap` but catches exceptions that could be thrown by the transformin
 
 ```kotlin
 val result = runCatching { "Start Value" }
-    .flatMap { startValue -> throw RuntimeException("MyException") }
+    .flatMapCatching { startValue -> throw RuntimeException("MyException") }
     .getOrThrow()
 
 // `result` is `Result.failure(RuntimeException("MyException"))`
