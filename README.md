@@ -56,7 +56,7 @@ dependencies {
     - [`flatRecoverIf`](#flatRecoverIf)
     - [`flatRecoverCatchingIf`](#flatRecoverCatchingIf)
 
-#### Flattening extensions
+#### *Flattening extensions*
 
 These extensions make possible the chaining of operations avoiding `Result<Result<T>>` compositions.
 
@@ -133,7 +133,7 @@ val result = runCatching { "Start Value" }
 // "result" is "More: Start Value"
 ```
 
-#### Conditional extensions
+#### *Conditional extensions*
 
 These extensions make possible to conditionally apply a transformation *only if* a
 certain `predicate` is satisfied.
@@ -196,7 +196,7 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### Conditional flattening extensions
+#### *Conditional flattening extensions*
 
 These extensions combine the utility of *flattening* extensions with that of *conditional* ones.
 
