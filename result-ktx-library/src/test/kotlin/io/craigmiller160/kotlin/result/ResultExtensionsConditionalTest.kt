@@ -19,6 +19,454 @@ class ResultExtensionsConditionalTest {
     private val myOtherFailureResult = Result.failure<String>(MyTestException("Second"))
 
     @Test
+    fun mapIfOnSuccessfulResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .mapIf({ true }) { myOtherSuccessResult }
+
+        assertEquals(Result.success(myOtherSuccessResult), actualResult)
+    }
+
+    @Test
+    fun mapIfOnSuccessfulResultIntoSuccessfulResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .mapIf({ false }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnSuccessfulResultIntoFailureResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .mapIf({ true }) { myFailureResult }
+
+        assertEquals(Result.success(myFailureResult), actualResult)
+    }
+
+    @Test
+    fun mapIfOnSuccessfulResultIntoFailureResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .mapIf({ false }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test(expected = MyTestException::class)
+    fun mapIfOnSuccessfulResultIntoPredicateThrowingException() {
+        mySuccessResult
+            .mapIf({ throw MyTestException() }) { throw MyOtherTestException() }
+    }
+
+    @Test(expected = MyTestException::class)
+    fun mapIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
+        mySuccessResult
+            .mapIf({ true }) { throw MyTestException() }
+    }
+
+    @Test
+    fun mapIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
+        mySuccessResult
+            .mapIf({ false }) { throw MyTestException() }
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoSuccessResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ true }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoSuccessResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ false }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoFailureResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ true }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoFailureResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ false }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoPredicateThrowingException() {
+        val actualResult = myFailureResult
+            .mapIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ true }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapIfOnFailureResultIntoTransformsThrowingExceptionWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapIf({ false }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ true }) { myOtherSuccessResult }
+
+        assertEquals(Result.success(myOtherSuccessResult), actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoSuccessfulResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ false }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoFailureResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ true }) { myFailureResult }
+
+        assertEquals(Result.success(myFailureResult), actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoFailureResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ false }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoPredicateThrowingException() {
+        val testException = MyTestException()
+
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ throw testException }) { throw MyOtherTestException() }
+
+        assertEquals(Result.failure<String>(testException), actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val testException = MyTestException()
+
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ true }) { throw testException }
+
+        assertEquals(Result.failure<String>(testException), actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
+        val testException = MyTestException()
+
+        val actualResult = mySuccessResult
+            .mapCatchingIf({ false }) { throw testException }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoSuccessResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ true }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoSuccessResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ false }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoFailureResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ true }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoFailureResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ false }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoPredicateThrowingException() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ true }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun mapCatchingIfOnFailureResultIntoTransformThrowingExceptionWithFalseCondition() {
+        val actualResult = myFailureResult
+            .mapCatchingIf({ false }) { throw MyTestException() }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ true }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoSuccessfulResultWitFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ false }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoFailureResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ true }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoFailureResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ false }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoPredicateThrowingException() {
+        val actualResult = mySuccessResult
+            .recoverIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ true }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverIf({ false }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnFailureResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .recoverIf({ true }) { mySuccessResult }
+
+        assertEquals(Result.success(mySuccessResult), actualResult)
+    }
+
+    @Test
+    fun recoverIfOnFailureResultIntoSuccessfulResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .recoverIf({ false }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun recoverIfOnFailureResultIntoFailureResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .recoverIf({ true }) { myOtherFailureResult }
+
+        assertEquals(Result.success(myOtherFailureResult), actualResult)
+    }
+
+    @Test
+    fun recoverIfOnFailureResultIntoFailureResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .recoverIf({ false }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test(expected = MyTestException::class)
+    fun recoverIfOnFailureResultIntoPredicateThrowingException() {
+        myFailureResult
+            .recoverIf({ throw MyTestException() }) { throw MyOtherTestException() }
+    }
+
+    @Test(expected = MyTestException::class)
+    fun recoverIfOnFailureResultIntoTransformThrowingExceptionWithTrueCondition() {
+        myFailureResult
+            .recoverIf({ true }) { throw MyTestException() }
+    }
+
+    @Test
+    fun recoverIfOnFailureResultIntoTransformThrowingExceptionWithFalseCondition() {
+        myFailureResult
+            .recoverIf({ false }) { throw MyTestException() }
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ true }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoSuccessfulResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ false }) { myOtherSuccessResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoFailureResultWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ true }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoFailureResultWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ false }) { myFailureResult }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoPredicateThrowingException() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ true }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
+        val actualResult = mySuccessResult
+            .recoverCatchingIf({ false }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoSuccessfulResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ true }) { mySuccessResult }
+
+        assertEquals(Result.success(mySuccessResult), actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoSuccessfulResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ false }) { mySuccessResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoFailureResultWithTrueCondition() {
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ true }) { myOtherFailureResult }
+
+        assertEquals(Result.success(myOtherFailureResult), actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoFailureResultWithFalseCondition() {
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ false }) { myOtherFailureResult }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoPredicateThrowingException() {
+        val testException = MyTestException()
+
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ throw testException }) { throw MyOtherTestException() }
+
+        assertEquals(Result.failure<String>(testException), actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoTransformThrowingExceptionWithTrueCondition() {
+        val testException = MyTestException()
+
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ true }) { throw testException }
+
+        assertEquals(Result.failure<String>(testException), actualResult)
+    }
+
+    @Test
+    fun recoverCatchingIfOnFailureResultIntoTransformThrowingExceptionWithFalseCondition() {
+        val testException = MyTestException()
+
+        val actualResult = myFailureResult
+            .recoverCatchingIf({ false }) { throw testException }
+
+        assertEquals(myFailureResult, actualResult)
+    }
+
+    @Test
     fun flatMapIfOnSuccessfulResultIntoSuccessfulResultWithTrueCondition() {
         val actualResult = mySuccessResult
             .flatMapIf({ true }) { myOtherSuccessResult }
@@ -275,7 +723,15 @@ class ResultExtensionsConditionalTest {
     }
 
     @Test
-    fun flatRecoverIfOnSuccessfulResultIntoThrowingExceptionWithTrueCondition() {
+    fun flatRecoverIfOnSuccessfulResultIntoPredicateThrowingException() {
+        val actualResult = mySuccessResult
+            .flatRecoverIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun flatRecoverIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
         val actualResult = mySuccessResult
             .flatRecoverIf({ true }) { throw MyTestException() }
 
@@ -283,7 +739,7 @@ class ResultExtensionsConditionalTest {
     }
 
     @Test
-    fun flatRecoverIfOnSuccessfulResultIntoThrowingExceptionWithFalseCondition() {
+    fun flatRecoverIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
         val actualResult = mySuccessResult
             .flatRecoverIf({ false }) { throw MyTestException() }
 
@@ -373,7 +829,15 @@ class ResultExtensionsConditionalTest {
     }
 
     @Test
-    fun flatRecoverCatchingIfOnSuccessfulResultIntoThrowingExceptionWithTrueCondition() {
+    fun flatRecoverCatchingIfOnSuccessfulResultIntoPredicateThrowingException() {
+        val actualResult = mySuccessResult
+            .flatRecoverCatchingIf({ throw MyTestException() }) { throw MyTestException() }
+
+        assertEquals(mySuccessResult, actualResult)
+    }
+
+    @Test
+    fun flatRecoverCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithTrueCondition() {
         val actualResult = mySuccessResult
             .flatRecoverCatchingIf({ true }) { throw MyTestException() }
 
@@ -381,7 +845,7 @@ class ResultExtensionsConditionalTest {
     }
 
     @Test
-    fun flatRecoverCatchingIfOnSuccessfulResultIntoThrowingExceptionWithFalseCondition() {
+    fun flatRecoverCatchingIfOnSuccessfulResultIntoTransformThrowingExceptionWithFalseCondition() {
         val actualResult = mySuccessResult
             .flatRecoverCatchingIf({ false }) { throw MyTestException() }
 
