@@ -34,8 +34,7 @@ dependencies {
 
 ### Overview
 
-- *Flattening extensions* (that make possible the chaining of operations
-  avoiding `Result<Result<T>>` compositions):
+- *[Flattening extensions](#Flattening extensions)*:
 
     - [`flatMap`](#flatMap)
     - [`flatMapCatching`](#flatMapCatching)
@@ -43,22 +42,25 @@ dependencies {
     - [`flatReceoverCatching`](#flatReceoverCatching)
     - [`flatten`](#flatten)
 
-- *Conditional extensions* (that make possible to conditionally apply a transformation only if a
-  certain `predicate` is satisfied):
+- *[Conditional extensions](#Conditional extensions)*:
 
     - [`mapIf`](#mapIf)
     - [`mapCatchingIf`](#mapCatchingIf)
     - [`recoverIf`](#recoverIf)
     - [`recoverCatchingIf`](#recoverCatchingIf)
 
-- *Conditional flattening extensions* (combining the above explained functionalities):
+- *[Conditional flattening extensions](#Conditional flattening extensions)*:
 
     - [`flatMapIf`](#flatMapIf)
     - [`flatMapCatchingIf`](#flatMapCatchingIf)
     - [`flatRecoverIf`](#flatRecoverIf)
     - [`flatRecoverCatchingIf`](#flatRecoverCatchingIf)
 
-#### `flatMap`
+#### Flattening extensions
+
+These extensions make possible the chaining of operations avoiding `Result<Result<T>>` compositions.
+
+##### `flatMap`
 
 Transforms the value of a successful `Result` and expects the result of the transformation to return
 a `Result`. Using just `map`, this leads to `Result<Result<T>>`, but `flatMap` will unwrap the
@@ -76,7 +78,7 @@ val result = runCatching { "Start Value" }
 // `result` is `"More: Start Value"`
 ```
 
-#### `flatMapCatching`
+##### `flatMapCatching`
 
 Same as `flatMap` but catches exceptions that could be thrown by the transforming function.
 
@@ -89,7 +91,7 @@ val result = runCatching { "Start Value" }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### `flatRecover`
+##### `flatRecover`
 
 Similar to the existing `recover` function, only it expects a `Result` to be returned from the
 transformation. Like the others, it will unwrap the `Result` to propagate it. Useful for recovering
@@ -103,7 +105,7 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Hello World`
 ```
 
-#### `flatRecoverCatching`
+##### `flatRecoverCatching`
 
 Same as `flatRecover`, but it can handle exceptions being thrown within the function body.
 
@@ -114,7 +116,7 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### `flatten`
+##### `flatten`
 
 A simple way to unwrap nested Results from chained operations.
 
@@ -131,7 +133,12 @@ val result = runCatching { "Start Value" }
 // "result" is "More: Start Value"
 ```
 
-#### `mapIf`
+#### Conditional extensions
+
+These extensions make possible to conditionally apply a transformation *only if* a
+certain `predicate` is satisfied.
+
+##### `mapIf`
 
 If the provided predicate returns `true`, transforms the value of a successful `Result` into another
 value.
@@ -148,7 +155,7 @@ val result = runCatching { "Start Value" }
 // `result` is `"More: Start Value"`
 ```
 
-#### `mapCatchingIf`
+##### `mapCatchingIf`
 
 Same as `mapIf` but catches exceptions that could be thrown by the `predicate` or `transform`
 functions.
@@ -162,7 +169,7 @@ val result = runCatching { "Start Value" }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### `recoverIf`
+##### `recoverIf`
 
 If the provided predicate returns `true`, recovers the exception of a failed `Result` into another
 value.
@@ -175,7 +182,7 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Hello World`
 ```
 
-#### `recoverCatchingIf`
+##### `recoverCatchingIf`
 
 Same as `recoverIf`, but it can handle exceptions being thrown within the `predicate`
 and `transform` functions' body.
@@ -189,7 +196,11 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### `flatMapIf`
+#### Conditional flattening extensions
+
+These extensions combine the utility of *flattening* extensions with that of *conditional* ones.
+
+##### `flatMapIf`
 
 Combines functionalities of `mapIf` and `flatMap` explained above.
 
@@ -207,7 +218,7 @@ val result = runCatching { "Start Value" }
 // `result` is `"More: Start Value"`
 ```
 
-#### `flatMapCatchingIf`
+##### `flatMapCatchingIf`
 
 Combines functionalities of `mapCatchingIf` and `flatMapCatching` explained above.
 
@@ -220,7 +231,7 @@ val result = runCatching { "Start Value" }
 // `result` is `Result.failure(RuntimeException("MyException"))`
 ```
 
-#### `flatRecoverIf`
+##### `flatRecoverIf`
 
 Combines functionalities of `recoverIf` and `flatRecover` explained above.
 
@@ -232,7 +243,7 @@ val result = runCatching { throw RuntimeException("Dying") }
 // `result` is `Hello World`
 ```
 
-#### `flatRecoverCatchingIf`
+##### `flatRecoverCatchingIf`
 
 Combines functionalities of `recoverCatchingIf` and `flatRecoverCatching` explained above.
 
