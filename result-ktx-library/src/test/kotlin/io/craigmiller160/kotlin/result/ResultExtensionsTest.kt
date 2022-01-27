@@ -3,7 +3,7 @@ package io.craigmiller160.kotlin.result
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class ResultUtilsTest {
+class ResultExtensionsTest {
 
     /** Exception used in tests */
     data class MyTestException(override val message: String? = null) : RuntimeException(message)
