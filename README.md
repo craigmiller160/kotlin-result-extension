@@ -34,7 +34,7 @@ dependencies {
 
 ### Overview
 
-- *[Flattening extensions](#Flattening extensions)*:
+- *[Flattening extensions](#flattening-extensions)*:
 
     - [`flatMap`](#flatMap)
     - [`flatMapCatching`](#flatMapCatching)
@@ -42,14 +42,14 @@ dependencies {
     - [`flatReceoverCatching`](#flatReceoverCatching)
     - [`flatten`](#flatten)
 
-- *[Conditional extensions](#Conditional extensions)*:
+- *[Conditional extensions](#conditional-extensions)*:
 
     - [`mapIf`](#mapIf)
     - [`mapCatchingIf`](#mapCatchingIf)
     - [`recoverIf`](#recoverIf)
     - [`recoverCatchingIf`](#recoverCatchingIf)
 
-- *[Conditional flattening extensions](#Conditional flattening extensions)*:
+- *[Conditional flattening extensions](#conditional-flattening-extensions)*:
 
     - [`flatMapIf`](#flatMapIf)
     - [`flatMapCatchingIf`](#flatMapCatchingIf)
