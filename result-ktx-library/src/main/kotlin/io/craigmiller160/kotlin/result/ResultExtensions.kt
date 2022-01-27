@@ -36,10 +36,11 @@ inline fun <R, T> Result<T>.flatMapCatching(transform: (value: T) -> Result<R>):
  * Note, that this function rethrows any [Throwable] exception thrown by [transform] function.
  * See [flatRecoverCatching] for an alternative that encapsulates exceptions.
  */
-inline fun <R, T : R> Result<T>.flatRecover(transform: (Throwable) -> Result<R>): Result<R> = fold(
-    onSuccess = { this },
-    onFailure = { exception -> transform(exception) }
-)
+inline fun <R, T : R> Result<T>.flatRecover(transform: (exception: Throwable) -> Result<R>): Result<R> =
+    fold(
+        onSuccess = { this },
+        onFailure = { exception -> transform(exception) }
+    )
 
 /**
  * Returns the result of the given [transform] function applied to the encapsulated [Throwable] exception
@@ -49,5 +50,5 @@ inline fun <R, T : R> Result<T>.flatRecover(transform: (Throwable) -> Result<R>)
  * This function catches any [Throwable] exception thrown by [transform] function and encapsulates it as a failure.
  * See [flatRecover] for an alternative that rethrows exceptions.
  */
-inline fun <R, T : R> Result<T>.flatRecoverCatching(transform: (Throwable) -> Result<R>): Result<R> =
+inline fun <R, T : R> Result<T>.flatRecoverCatching(transform: (exception: Throwable) -> Result<R>): Result<R> =
     flatRecover { kotlin.runCatching { transform(it) }.flatten() }
