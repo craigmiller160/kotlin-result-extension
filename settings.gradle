@@ -1,0 +1,11 @@
+rootProject.name = repositoryProjectName
+
+// ------------------------------------------------------------- //
+// Add "to be included" modules names in gradle.properties file! //
+// ------------------------------------------------------------- //
+
+final String moduleNameSeparator = ','
+for (moduleName in moduleNames.split(moduleNameSeparator)) {
+    //println(moduleName)
+    include ":${moduleName.trim()}"
+}
