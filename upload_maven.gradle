@@ -31,30 +31,5 @@ afterEvaluate {
                 version = artifactVersion
             }
         }
-
-        repositories {
-            // Declare repository where to publish (same syntax as when declaring for consuming dependencies)
-            maven {
-                def repoUrlVarName = "MAVEN_REPO_URL"
-                def repoUsernameVarName = "MAVEN_REPO_USERNAME"
-                def repoPasswordVarName = "MAVEN_REPO_PASSWORD"
-
-                def repoUrl = System.getenv(repoUrlVarName)
-                def repoUsername = System.getenv(repoUsernameVarName)
-                def repoPassword = System.getenv(repoPasswordVarName)
-
-                if (repoUrl == null) {
-                    repoUrl = getProperty(repoUrlVarName)
-                    repoUsername = getProperty(repoUsernameVarName)
-                    repoPassword = getProperty(repoPasswordVarName)
-                }
-
-                url repoUrl
-                credentials {
-                    username repoUsername
-                    password repoPassword
-                }
-            }
-        }
     }
 }

@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: "../upload_maven.gradle"
+
 android {
     compileSdkVersion 31
 
