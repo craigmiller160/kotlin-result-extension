@@ -1,55 +1,25 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
 }
 
 apply from: "../upload_maven.gradle"
 
-android {
-    compileSdkVersion 31
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
+}
 
-    defaultConfig {
-        minSdkVersion 22
-        targetSdkVersion 31
-        versionCode 1
-        versionName artifactVersion
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    sourceSets {
-        main {
-            res.srcDirs += ['src/main/res-localizations']
-            java.srcDirs += ['src/main/kotlin']
-        }
-        test {
-            java.srcDirs += ['src/test/kotlin']
-        }
-    }
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
 
-    // Required -- JUnit 4 framework
-    testImplementation "junit:junit:4.13.2"
-
-    // Instrumented tests (run on device)
-    androidTestImplementation "androidx.test:runner:1.4.0"
-    androidTestImplementation "androidx.test:rules:1.4.0"
+    // Testing dependencies
+    testImplementation("junit:junit:4.13.2")
 }
