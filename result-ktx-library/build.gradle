@@ -1,0 +1,26 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+}
+
+apply from: "../upload_maven.gradle"
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+
+    // Testing dependencies
+    testImplementation("junit:junit:4.13.2")
+}
